@@ -30,7 +30,7 @@ We use [SwiftLint](https://github.com/realm/SwiftLint/blob/master/Rules.md) for 
   * [Protocol Conformance](#protocol-conformance)
   * [Unused Code](#unused-code)
   * [Minimal Imports](#minimal-imports)
-* [Spacing](#spacing)
+* [Spacing](#spacing) (specific)
 * [Comments](#comments)
 * [Classes and Structures](#classes-and-structures)
   * [Use of Self](#use-of-self)
@@ -124,9 +124,9 @@ The closure closing brace needs to be indented to the same level as the closure 
 **Preferred**:
 ```swift
 SignalProducer(values: [1, 2, 3])
- .startWithNext { number in
-	 print(number)
- }
+    .startWithNext { number in 
+        print(number)
+    }
 /* or */
 someReallyLongProperty.chainingWithAnotherProperty.foo { _  in }
 ```
@@ -134,16 +134,16 @@ someReallyLongProperty.chainingWithAnotherProperty.foo { _  in }
 **Not Preferred**:
 ```swift
 SignalProducer(values: [1, 2, 3])
- .startWithNext { number in
-	print(number)
+    .startWithNext { number in
+        print(number)
 }
 /* or */
 function(
- closure: { x in
-	print(x)
+    closure: { x in
+        print(x)
 },
-anotherClosure: { y in
-	print(y)
+    anotherClosure: { y in
+        print(y)
 })
 ```
 \
@@ -173,17 +173,17 @@ The end of the declaration of an Array or Dictionary must have the same indentat
 [1, 2, 3]
 /* or */
 let x = [
-	1,
-	2
+    1,
+    2
 ]
 ```
 
 **Not Preferred**:
 ```swift
 let x = [
-	1,
-	2
-	]
+    1,
+    2
+    ]
 ```
 
 \
@@ -283,14 +283,14 @@ Multiline parameters in functions must be aligned vertically.
 **Preferred**:
 ```swift
 foo(param1: 1, 
-    param2: bar
+    param2: bar,
     param3: false,
     param4: true)
 ```
 
 **Not Preferred**:
 ```swift
-foo(param1: 1, param2: bar
+foo(param1: 1, param2: bar,
     param3: false,
     param4: true)
 ```
@@ -547,7 +547,7 @@ var deviceModels: [String]
 
 ## Spacing
 
-* Indent using 2 spaces rather than tabs to conserve space and help prevent line wrapping. Be sure to set this preference in Xcode and in the Project settings as shown below:
+* Indent using 4 spaces rather than tabs to conserve space and help prevent line wrapping. Be sure to set this preference in Xcode and in the Project settings as shown below:
 
 ![Xcode indent settings](screens/indentation.png)
 
