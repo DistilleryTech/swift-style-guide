@@ -1,12 +1,23 @@
-# Distillery Swift Style Guide.
+﻿# Distillery Swift Style Guide.
 ### Updated for Swift 4.2
 
-This style guide is different from others you may see, because the focus is centered on readability for print and the web. We created this style guide to keep the code in our books, tutorials, and starter kits nice and consistent — even though we have many different authors working on the books.
+This style guide is based on [The Official raywenderlich.com Swift Style Guide](https://github.com/raywenderlich/swift-style-guide) but also updated with Distillery specific rules.
+\
+We use [SwiftLint](https://github.com/realm/SwiftLint/blob/master/Rules.md) for linting. You can find our configuration file [here](https://github.com/DistilleryTech/ios-dotfiles/blob/master/.swiftlint.yml). SwiftLint code style and configuration rules described in the [SwiftLint](#swiftlint) section of the guide.
 
-Our overarching goals are clarity, consistency and brevity, in that order.
 
 ## Table of Contents
 
+* [SwiftLint](#swiftlint)
+	* [Default rules](#default-rules)
+	* [Braces](#braces)
+	* [Tuples](#tuples)
+	* [Closures](#closures)
+	* [Arrays and Dictionaries](#arrays-and-dictionaries)
+	* [Errors](#errors)
+	* [Initialization](#initialization)
+	* [Functions](#functions)
+	* [Formatting](#formatting)
 * [Correctness](#correctness)
 * [Naming](#naming)
   * [Prose](#prose)
@@ -53,6 +64,260 @@ Our overarching goals are clarity, consistency and brevity, in that order.
 * [Smiley Face](#smiley-face)
 * [References](#references)
 
+## SwiftLint
+
+### Default rules
+
+There are default SwiftLint rules which are described [here](https://realm.github.io/SwiftLint/rule-directory.html). 
+However, we have disabled some rules for convenience purposes:
+
+- "Line Length" disabled, but good developers know that line length should be 120 characters or less.
+- "Force cast" is allowed, but use it only in rare cases, for example, for the table cell casting.
+- ```//TODO``` and ```//FIXME``` are allowed.
+- An object could remove itself as an observer in any place, not only in ```deinit```
+- Trailing comma allowed in arrays and dictionaries initialization, it is convenient for the copy-paste.
+- Unneeded break in ```switch``` statement is allowed.
+- Unused optional binding ```if  let  _ = Foo.optionalValue``` is allowed.
+
+### Braces
+
+Method braces, closer and other braces (`if`/`else`/`switch`/`while` etc.) always open on the same line as the statement but close on a new line. 
+
+**Preferred**:
+```swift
+func someMethod() {
+	if x == y {
+	/* ... */
+	}
+}
+```
+
+**Not Preferred**:
+```swift
+func someMethod() 
+{
+	if x == y 
+	{
+	/* ... */
+	}
+}
+```
+
+### Tuples
+
+Number of items in a tuple should be 4-5 max. In all other cases it is better to use custom type.
+
+**Preferred**:
+```swift
+let foo: (Int, (Int, String))
+```
+
+**Not Preferred**:
+```swift
+let foo: (Int, (Int, String, Float, Int, Double))
+```
+
+### Closures
+
+The closure closing brace needs to be indented to the same level as the closure opening brace line.
+
+**Preferred**:
+```swift
+SignalProducer(values: [1, 2, 3])
+ .startWithNext { number in
+	 print(number)
+ }
+/* or */
+someReallyLongProperty.chainingWithAnotherProperty.foo { _  in }
+```
+
+**Not Preferred**:
+```swift
+SignalProducer(values: [1, 2, 3])
+ .startWithNext { number in
+	print(number)
+}
+/* or */
+function(
+ closure: { x in
+	print(x)
+},
+anotherClosure: { y in
+	print(y)
+})
+```
+\
+Closure expressions should have a single space inside each brace.
+
+**Preferred**:
+```swift
+[].map ({ $0.description })
+
+[].filter { $0.contains(location) }
+```
+
+**Not Preferred**:
+```swift
+[].map({$0})
+
+({each in  return result.contains(where: {e in  return e}) }).count
+```
+
+
+### Arrays and Dictionaries
+
+The end of the declaration of an Array or Dictionary must have the same indentation as the line on which the declaration began.
+
+**Preferred**:
+```swift
+[1, 2, 3]
+/* or */
+let x = [
+	1,
+	2
+]
+```
+
+**Not Preferred**:
+```swift
+let x = [
+	1,
+	2
+	]
+```
+
+\
+Use **contains** instead of **first(where:) != nil**
+
+**Preferred**:
+```swift
+let first = myList.first { $0 % 2 == 0 }
+
+let containsEven = myList.contains { $0 % 2 == 0 }
+```
+
+**Not Preferred**:
+```swift
+myList.first { $0 % 2 == 0 } != nil
+```
+
+\
+Use **.first(where:)** instead of **filter { }.first**
+
+**Preferred**:
+```swift
+let first = myList.first(where: { $0 % 2 == 0 })
+```
+
+**Not Preferred**:
+```swift
+let first = myList.filter { $0 % 2 == 0 }.first
+```
+
+\
+Use **isEmpty** instead of **count == 0.** Or **!isEmpty** instead of **count != 0**.
+
+**Preferred**:
+```swift
+if myList.isEmpty {
+}
+```
+
+**Not Preferred**:
+```swift
+if myList.count == 0 {
+}
+```
+
+
+### Errors
+
+```fatalError()``` must have message.
+
+**Preferred**:
+```swift
+fatalError(errorDescription)
+```
+
+**Not Preferred**:
+```swift
+fatalError()
+```
+
+### Initialization
+
+Don't use ```init()``` when there is no need.
+
+**Preferred**:
+```swift
+let foo = UIView()
+```
+
+**Not Preferred**:
+```swift
+let foo = UIView.init()
+```
+
+\
+Shortened forms are preferred.
+
+**Preferred**:
+```swift
+var deviceModels: [String]
+var employees: [Int: String]
+var faxNumber: Int?
+```
+
+**Not Preferred**:
+```swift
+var deviceModels: Array<String>
+var employees: Dictionary<Int, String>
+var faxNumber: Optional<Int>
+```
+
+
+### Functions
+
+Multiline parameters in functions must be aligned vertically.
+
+**Preferred**:
+```swift
+foo(param1: 1, 
+	param2: bar
+	param3: false,
+	param4: true)
+```
+
+**Not Preferred**:
+```swift
+foo(param1: 1, param2: bar
+	param3: false,
+	param4: true)
+```
+
+### Formatting
+
+Colons must not have a space on the left and there must be a space on the right.
+Exceptions:
+- ternary operator (a  ?  b  :  c)
+
+- empty dictionary [:]
+
+- #selector with anonymous parameters (_ :)
+
+**Preferred**:
+```swift
+class  TestDatabase: Database {
+	var data: [String: CGFloat] = ["A": 1.2, "B": 3.2]
+}
+```
+
+**Not Preferred**:
+```swift
+class  TestDatabase : Database {
+	var data :[String:CGFloat] = ["A" : 1.2, "B":3.2]
+}
+```
 
 ## Correctness
 
