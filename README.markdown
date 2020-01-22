@@ -71,7 +71,7 @@ We use [SwiftLint](https://github.com/realm/SwiftLint/blob/master/Rules.md) for 
 There are default SwiftLint rules which are described [here](https://realm.github.io/SwiftLint/rule-directory.html). 
 However, we have disabled some rules for convenience purposes:
 
-- "Line Length" disabled, but good developers know that line length should be 120 characters or less.
+- "Line Length" disabled, but good developers know that line length should be 70 characters or less.
 - "Force cast" is allowed, but use it only in rare cases, for example, for the table cell casting.
 - ```//TODO``` and ```//FIXME``` are allowed.
 - An object could remove itself as an observer in any place, not only in ```deinit```
@@ -86,9 +86,9 @@ Method braces, closer and other braces (`if`/`else`/`switch`/`while` etc.) alway
 **Preferred**:
 ```swift
 func someMethod() {
-	if x == y {
-	/* ... */
-	}
+    if x == y {
+      /* ... */
+    }
 }
 ```
 
@@ -96,10 +96,10 @@ func someMethod() {
 ```swift
 func someMethod() 
 {
-	if x == y 
-	{
-	/* ... */
-	}
+    if x == y 
+    {
+    /* ... */
+    }
 }
 ```
 
@@ -283,16 +283,16 @@ Multiline parameters in functions must be aligned vertically.
 **Preferred**:
 ```swift
 foo(param1: 1, 
-	param2: bar
-	param3: false,
-	param4: true)
+    param2: bar
+    param3: false,
+    param4: true)
 ```
 
 **Not Preferred**:
 ```swift
 foo(param1: 1, param2: bar
-	param3: false,
-	param4: true)
+    param3: false,
+    param4: true)
 ```
 
 ### Formatting
@@ -308,14 +308,14 @@ Exceptions:
 **Preferred**:
 ```swift
 class  TestDatabase: Database {
-	var data: [String: CGFloat] = ["A": 1.2, "B": 3.2]
+    var data: [String: CGFloat] = ["A": 1.2, "B": 3.2]
 }
 ```
 
 **Not Preferred**:
 ```swift
 class  TestDatabase : Database {
-	var data :[String:CGFloat] = ["A" : 1.2, "B":3.2]
+    var data :[String:CGFloat] = ["A" : 1.2, "B":3.2]
 }
 ```
 
