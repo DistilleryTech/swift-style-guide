@@ -1,23 +1,14 @@
 ﻿# Distillery Swift Style Guide.
 ### Updated for Swift 4.2
 
-This style guide is based on [The Official raywenderlich.com Swift Style Guide](https://github.com/raywenderlich/swift-style-guide) but also updated with Distillery specific rules.
+This style guide is based on [The Official raywenderlich.com Swift Style Guide](https://github.com/raywenderlich/swift-style-guide) but also updated with Distillery rules (updated sections marked as specific or supplemented).
 \
-We use [SwiftLint](https://github.com/realm/SwiftLint/blob/master/Rules.md) for linting. You can find our configuration file [here](https://github.com/DistilleryTech/ios-dotfiles/blob/master/.swiftlint.yml). SwiftLint code style and configuration rules described in the [SwiftLint](#swiftlint) section of the guide.
+We use [SwiftLint](https://github.com/realm/SwiftLint/blob/master/Rules.md) for linting. You can find our configuration file [here](https://github.com/DistilleryTech/ios-dotfiles/blob/master/.swiftlint.yml). SwiftLint configuration rules described in the [SwiftLint](#swiftlint) section of the guide.
 
 
 ## Table of Contents
 
 * [SwiftLint](#swiftlint)
-	* [Default rules](#default-rules)
-	* [Braces](#braces)
-	* [Tuples](#tuples)
-	* [Closures](#closures)
-	* [Arrays and Dictionaries](#arrays-and-dictionaries)
-	* [Errors](#errors)
-	* [Initialization](#initialization)
-	* [Functions](#functions)
-	* [Formatting](#formatting)
 * [Correctness](#correctness)
 * [Naming](#naming)
   * [Prose](#prose)
@@ -33,13 +24,16 @@ We use [SwiftLint](https://github.com/realm/SwiftLint/blob/master/Rules.md) for 
 * [Spacing](#spacing) (specific)
 * [Comments](#comments)
 * [Classes and Structures](#classes-and-structures)
+  * [Initialization](#initialization) (specific)
   * [Use of Self](#use-of-self)
   * [Protocol Conformance](#protocol-conformance)
   * [Computed Properties](#computed-properties)
   * [Final](#final)
+  * [Tuples](#tuples) (specific)
+  * [Arrays and Dictionaries](#arrays-and-dictionaries) (specific)
 * [Function Declarations](#function-declarations)
 * [Function Calls](#function-calls)
-* [Closure Expressions](#closure-expressions)
+* [Closure Expressions](#closure-expressions) (supplemented)
 * [Types](#types)
   * [Constants](#constants)
   * [Static Methods and Variable Type Properties](#static-methods-and-variable-type-properties)
@@ -50,6 +44,7 @@ We use [SwiftLint](https://github.com/realm/SwiftLint/blob/master/Rules.md) for 
 * [Functions vs Methods](#functions-vs-methods)
 * [Memory Management](#memory-management)
   * [Extending Lifetime](#extending-lifetime)
+* [Error Handling](#error-handling) (specific)
 * [Access Control](#access-control)
 * [Control Flow](#control-flow)
   * [Ternary Operator](#ternary-operator)
@@ -59,19 +54,13 @@ We use [SwiftLint](https://github.com/realm/SwiftLint/blob/master/Rules.md) for 
 * [Parentheses](#parentheses)
 * [Multi-line String Literals](#multi-line-string-literals)
 * [No Emoji](#no-emoji)
-* [Organization and Bundle Identifier](#organization-and-bundle-identifier)
-* [Copyright Statement](#copyright-statement)
-* [Smiley Face](#smiley-face)
-* [References](#references)
 
 ## SwiftLint
-
-### Default rules
 
 There are default SwiftLint rules which are described [here](https://realm.github.io/SwiftLint/rule-directory.html). 
 However, we have disabled some rules for convenience purposes:
 
-- "Line Length" disabled, but good developers know that line length should be 70 characters or less.
+- "Line Length" disabled, but good developers know that line length should be 120 characters or less.
 - "Force cast" is allowed, but use it only in rare cases, for example, for the table cell casting.
 - ```//TODO``` and ```//FIXME``` are allowed.
 - An object could remove itself as an observer in any place, not only in ```deinit```
@@ -79,245 +68,6 @@ However, we have disabled some rules for convenience purposes:
 - Unneeded break in ```switch``` statement is allowed.
 - Unused optional binding ```if  let  _ = Foo.optionalValue``` is allowed.
 
-### Braces
-
-Method braces, closer and other braces (`if`/`else`/`switch`/`while` etc.) always open on the same line as the statement but close on a new line. 
-
-**Preferred**:
-```swift
-func someMethod() {
-    if x == y {
-      /* ... */
-    }
-}
-```
-
-**Not Preferred**:
-```swift
-func someMethod() 
-{
-    if x == y 
-    {
-    /* ... */
-    }
-}
-```
-
-### Tuples
-
-Number of items in a tuple should be 4-5 max. In all other cases it is better to use custom type.
-
-**Preferred**:
-```swift
-let foo: (Int, (Int, String))
-```
-
-**Not Preferred**:
-```swift
-let foo: (Int, (Int, String, Float, Int, Double))
-```
-
-### Closures
-
-The closure closing brace needs to be indented to the same level as the closure opening brace line.
-
-**Preferred**:
-```swift
-SignalProducer(values: [1, 2, 3])
-    .startWithNext { number in 
-        print(number)
-    }
-/* or */
-someReallyLongProperty.chainingWithAnotherProperty.foo { _  in }
-```
-
-**Not Preferred**:
-```swift
-SignalProducer(values: [1, 2, 3])
-    .startWithNext { number in
-        print(number)
-}
-/* or */
-function(
-    closure: { x in
-        print(x)
-},
-    anotherClosure: { y in
-        print(y)
-})
-```
-\
-Closure expressions should have a single space inside each brace.
-
-**Preferred**:
-```swift
-[].map ({ $0.description })
-
-[].filter { $0.contains(location) }
-```
-
-**Not Preferred**:
-```swift
-[].map({$0})
-
-({each in  return result.contains(where: {e in  return e}) }).count
-```
-
-
-### Arrays and Dictionaries
-
-The end of the declaration of an Array or Dictionary must have the same indentation as the line on which the declaration began.
-
-**Preferred**:
-```swift
-[1, 2, 3]
-/* or */
-let x = [
-    1,
-    2
-]
-```
-
-**Not Preferred**:
-```swift
-let x = [
-    1,
-    2
-    ]
-```
-
-\
-Use **contains** instead of **first(where:) != nil**
-
-**Preferred**:
-```swift
-let first = myList.first { $0 % 2 == 0 }
-
-let containsEven = myList.contains { $0 % 2 == 0 }
-```
-
-**Not Preferred**:
-```swift
-myList.first { $0 % 2 == 0 } != nil
-```
-
-\
-Use **.first(where:)** instead of **filter { }.first**
-
-**Preferred**:
-```swift
-let first = myList.first(where: { $0 % 2 == 0 })
-```
-
-**Not Preferred**:
-```swift
-let first = myList.filter { $0 % 2 == 0 }.first
-```
-
-\
-Use **isEmpty** instead of **count == 0.** Or **!isEmpty** instead of **count != 0**.
-
-**Preferred**:
-```swift
-if myList.isEmpty {
-}
-```
-
-**Not Preferred**:
-```swift
-if myList.count == 0 {
-}
-```
-
-
-### Errors
-
-```fatalError()``` must have message.
-
-**Preferred**:
-```swift
-fatalError(errorDescription)
-```
-
-**Not Preferred**:
-```swift
-fatalError()
-```
-
-### Initialization
-
-Don't use ```init()``` when there is no need.
-
-**Preferred**:
-```swift
-let foo = UIView()
-```
-
-**Not Preferred**:
-```swift
-let foo = UIView.init()
-```
-
-\
-Shortened forms are preferred.
-
-**Preferred**:
-```swift
-var deviceModels: [String]
-var employees: [Int: String]
-var faxNumber: Int?
-```
-
-**Not Preferred**:
-```swift
-var deviceModels: Array<String>
-var employees: Dictionary<Int, String>
-var faxNumber: Optional<Int>
-```
-
-
-### Functions
-
-Multiline parameters in functions must be aligned vertically.
-
-**Preferred**:
-```swift
-foo(param1: 1, 
-    param2: bar,
-    param3: false,
-    param4: true)
-```
-
-**Not Preferred**:
-```swift
-foo(param1: 1, param2: bar,
-    param3: false,
-    param4: true)
-```
-
-### Formatting
-
-Colons must not have a space on the left and there must be a space on the right.
-Exceptions:
-- ternary operator (a  ?  b  :  c)
-
-- empty dictionary [:]
-
-- #selector with anonymous parameters (_ :)
-
-**Preferred**:
-```swift
-class  TestDatabase: Database {
-    var data: [String: CGFloat] = ["A": 1.2, "B": 3.2]
-}
-```
-
-**Not Preferred**:
-```swift
-class  TestDatabase : Database {
-    var data :[String:CGFloat] = ["A" : 1.2, "B":3.2]
-}
-```
 
 ## Correctness
 
@@ -552,7 +302,7 @@ var deviceModels: [String]
 ![Xcode indent settings](screens/indentation.png)
 
 * Method braces and other braces (`if`/`else`/`switch`/`while` etc.) always open on the same line as the statement but close on a new line.
-* Tip: You can re-indent by selecting some code (or **Command-A** to select all) and then **Control-I** (or **Editor ▸ Structure ▸ Re-Indent** in the menu). Some of the Xcode template code will have 4-space tabs hard coded, so this is a good way to fix that.
+* Tip: You can re-indent by selecting some code (or **Command-A** to select all) and then **Control-I** (or **Editor ▸ Structure ▸ Re-Indent** in the menu). 
 
 **Preferred**:
 ```swift
@@ -594,7 +344,7 @@ class TestDatabase : Database {
 }
 ```
 
-* Long lines should be wrapped at around 70 characters. A hard limit is intentionally not specified.
+* Long lines should be wrapped at around 120 characters. A hard limit is intentionally not specified.
 
 * Avoid trailing whitespaces at the ends of lines.
 
@@ -669,6 +419,20 @@ The example above demonstrates the following style guidelines:
  + Organize extra functionality (e.g. printing) in extensions.
  + Hide non-shared, implementation details such as `centerString` inside the extension using `private` access control.
 
+### Initialization
+
+Don't use ```init()``` when there is no need.
+
+**Preferred**:
+```swift
+let foo = UIView()
+```
+
+**Not Preferred**:
+```swift
+let foo = UIView.init()
+```
+
 ### Use of Self
 
 For conciseness, avoid using `self` since Swift does not require it to access an object's properties or invoke its methods.
@@ -707,6 +471,85 @@ final class Box<T> {
   init(_ value: T) {
     self.value = value
   }
+}
+```
+
+### Tuples
+
+Number of items in a tuple should be 4-5 max. In all other cases it is better to use custom type.
+
+**Preferred**:
+```swift
+let foo: (Int, (Int, String))
+```
+
+**Not Preferred**:
+```swift
+let foo: (Int, (Int, String, Float, Int, Double))
+```
+
+### Arrays and Dictionaries
+
+The end of the declaration of an Array or Dictionary must have the same indentation as the line on which the declaration began.
+
+**Preferred**:
+```swift
+[1, 2, 3]
+/* or */
+let x = [
+    1,
+    2
+]
+```
+
+**Not Preferred**:
+```swift
+let x = [
+    1,
+    2
+    ]
+```
+
+\
+Use **contains** instead of **first(where:) != nil**
+
+**Preferred**:
+```swift
+let first = myList.first { $0 % 2 == 0 }
+
+let containsEven = myList.contains { $0 % 2 == 0 }
+```
+
+**Not Preferred**:
+```swift
+myList.first { $0 % 2 == 0 } != nil
+```
+
+\
+Use **.first(where:)** instead of **filter { }.first**
+
+**Preferred**:
+```swift
+let first = myList.first(where: { $0 % 2 == 0 })
+```
+
+**Not Preferred**:
+```swift
+let first = myList.filter { $0 % 2 == 0 }.first
+```
+
+\
+Use **isEmpty** instead of **count == 0.** Or **!isEmpty** instead of **count != 0**.
+
+**Preferred**:
+```swift
+if myList.isEmpty {
+}
+```
+
+**Not Preferred**:
+```swift
+if myList.count == 0 {
 }
 ```
 
@@ -820,6 +663,50 @@ let value = numbers
   .map {$0 * 2}
   .filter {$0 > 50}
   .map {$0 + 10}
+```
+
+The closure closing brace needs to be indented to the same level as the closure opening brace line.
+
+**Preferred**:
+```swift
+SignalProducer(values: [1, 2, 3])
+    .startWithNext { number in 
+        print(number)
+    }
+/* or */
+someReallyLongProperty.chainingWithAnotherProperty.foo { _  in }
+```
+
+**Not Preferred**:
+```swift
+SignalProducer(values: [1, 2, 3])
+    .startWithNext { number in
+        print(number)
+}
+/* or */
+function(
+    closure: { x in
+        print(x)
+},
+    anotherClosure: { y in
+        print(y)
+})
+```
+
+Closure expressions should have a single space inside each brace.
+
+**Preferred**:
+```swift
+[].map ({ $0.description })
+
+[].filter { $0.contains(location) }
+```
+
+**Not Preferred**:
+```swift
+[].map({$0})
+
+({each in  return result.contains(where: {e in  return e}) }).count
 ```
 
 ## Types
@@ -1075,6 +962,20 @@ resource.request().onComplete { [weak self] response in
 }
 ```
 
+## Error Handling
+
+```fatalError()``` must have description message.
+
+**Preferred**:
+```swift
+fatalError(errorDescription)
+```
+
+**Not Preferred**:
+```swift
+fatalError()
+```
+
 ## Access Control
 
 Full access control annotation in tutorials can distract from the main topic and is not required. Using `private` and `fileprivate` appropriately, however, adds clarity and promotes encapsulation. Prefer `private` to `fileprivate`; use `fileprivate` only when the compiler insists.
@@ -1317,61 +1218,6 @@ let message = "You cannot charge the flux " +
 ## No Emoji
 
 Do not use emoji in your projects. For those readers who actually type in their code, it's an unnecessary source of friction. While it may be cute, it doesn't add to the learning and it interrupts the coding flow for these readers.
-
-## Organization and Bundle Identifier
-
-Where an Xcode project is involved, the organization should be set to `Ray Wenderlich` and the Bundle Identifier set to `com.raywenderlich.TutorialName` where `TutorialName` is the name of the tutorial project.
-
-![Xcode Project settings](screens/project_settings.png)
-
-## Copyright Statement
-
-The following copyright statement should be included at the top of every source
-file:
-
-```swift
-/// Copyright (c) 2019 Razeware LLC
-/// 
-/// Permission is hereby granted, free of charge, to any person obtaining a copy
-/// of this software and associated documentation files (the "Software"), to deal
-/// in the Software without restriction, including without limitation the rights
-/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-/// copies of the Software, and to permit persons to whom the Software is
-/// furnished to do so, subject to the following conditions:
-/// 
-/// The above copyright notice and this permission notice shall be included in
-/// all copies or substantial portions of the Software.
-/// 
-/// Notwithstanding the foregoing, you may not use, copy, modify, merge, publish,
-/// distribute, sublicense, create a derivative work, and/or sell copies of the
-/// Software in any work that is designed, intended, or marketed for pedagogical or
-/// instructional purposes related to programming, coding, application development,
-/// or information technology.  Permission for such use, copying, modification,
-/// merger, publication, distribution, sublicensing, creation of derivative works,
-/// or sale is expressly withheld.
-/// 
-/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-/// THE SOFTWARE.
-```
-
-## Smiley Face
-
-Smiley faces are a very prominent style feature of the [raywenderlich.com](https://www.raywenderlich.com/) site! It is very important to have the correct smile signifying the immense amount of happiness and excitement for the coding topic. The closing square bracket `]` is used because it represents the largest smile able to be captured using ASCII art. A closing parenthesis `)` creates a half-hearted smile, and thus is not preferred.
-
-**Preferred**:
-```
-:]
-```
-
-**Not Preferred**:
-```
-:)
-```
 
 ## References
 
