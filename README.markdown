@@ -65,8 +65,6 @@ However, we have disabled some rules for convenience purposes:
 - ```//TODO``` and ```//FIXME``` are allowed.
 - An object could remove itself as an observer in any place, not only in ```deinit```
 - Trailing comma allowed in arrays and dictionaries initialization, it is convenient for the copy-paste.
-- Unneeded break in ```switch``` statement is allowed.
-- Unused optional binding ```if  let  _ = Foo.optionalValue``` is allowed.
 
 
 ## Correctness
@@ -297,7 +295,7 @@ var deviceModels: [String]
 
 ## Spacing
 
-* Indent using 4 spaces rather than tabs to conserve space and help prevent line wrapping. Be sure to set this preference in Xcode and in the Project settings as shown below:
+* Indent using 4 spaces rather than tabs helps to prevent line wrapping. Be sure to set this preference in Xcode and in the Project settings as shown below:
 
 ![Xcode indent settings](screens/indentation.png)
 
@@ -660,9 +658,9 @@ Chained methods using trailing closures should be clear and easy to read in cont
 let value = numbers.map { $0 * 2 }.filter { $0 % 3 == 0 }.index(of: 90)
 
 let value = numbers
-  .map {$0 * 2}
-  .filter {$0 > 50}
-  .map {$0 + 10}
+  .map { $0 * 2 }
+  .filter { $0 > 50 }
+  .map { $0 + 10 }
 ```
 
 The closure closing brace needs to be indented to the same level as the closure opening brace line.
@@ -1069,7 +1067,6 @@ When coding with conditionals, the left-hand margin of the code should be the "g
 **Preferred**:
 ```swift
 func computeFFT(context: Context?, inputData: InputData?) throws -> Frequencies {
-
   guard let context = context else {
     throw FFTError.noContext
   }
@@ -1085,7 +1082,6 @@ func computeFFT(context: Context?, inputData: InputData?) throws -> Frequencies 
 **Not Preferred**:
 ```swift
 func computeFFT(context: Context?, inputData: InputData?) throws -> Frequencies {
-
   if let context = context {
     if let inputData = inputData {
       // use context and input to compute the frequencies
